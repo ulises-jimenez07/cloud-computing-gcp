@@ -1,0 +1,7 @@
+functions-framework==3.*
+google-cloud-aiplatform
+google-cloud-storage
+google-cloud-vision
+google-cloud-bigquery
+firebase-admin
+firebase-functions
