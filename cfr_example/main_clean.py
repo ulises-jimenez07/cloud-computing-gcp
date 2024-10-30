@@ -1,15 +1,14 @@
+#  Copyright 2024 Google. This software is provided as-is, without warranty or
+#  representation for any use or purpose.
+#  Your use of it is subject to your agreement with Google
+
 import json
 import os
+import base64
 
 from google.cloud import bigquery
 from google.cloud import storage
 from google.cloud import vision
-
-from firebase_admin import db, initialize_app
-from firebase_functions import https_fn
-import flask
-from flask import request
-from google.cloud import firestore
 
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part
@@ -20,11 +19,6 @@ MODEL_NAME = "gemini-1.5-flash-001"
 
 vertexai.init(project=PROJECT_ID, location=REGION)
 
-# Firestore App
-initialize_app()
-app = flask.Flask(__name__)
-db = firestore.Client(project=PROJECT_ID, database="testinter")
-
 
 def get_prompt_for_summary() -> str:
     prompt = """
@@ -32,11 +26,6 @@ def get_prompt_for_summary() -> str:
         Please summarize the given document.
     """
     return prompt
-
-
-def insert_document_firestore(file_name: str, summary: str):
-    data = {"name": file_name.split("/")[-1], "summary": summary}
-    db.collection("files").document(file_name.split("/")[-1]).set(data)
 
 
 def get_summary(src_bucket: str, file_name: str) -> str:
@@ -72,5 +61,3 @@ def on_document_added(event, context):
 
     summary = get_summary(src_bucket, src_fname)
     print("Summary:", summary)
-
-    insert_document_firestore(src_fname, summary)
