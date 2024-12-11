@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service # Defines a Kubernetes Service object
+metadata:
+  name: model # Name of the service. This is how you'll refer to it within Kubernetes.
+  labels: # Labels are used to organize and select objects in Kubernetes
+    run: model # This label is used to match the service to its corresponding pods (see selector below)
+spec: # Specification of the service
+  ports: # Ports that the service exposes
+  - port: 5000 # Port that the service exposes externally
+    protocol: TCP # Protocol used by the service (TCP in this case)
+  selector: # Used to select the pods that this service targets
+    run: model # This label selector matches pods with the label "run: model" (see the deployment.yaml)

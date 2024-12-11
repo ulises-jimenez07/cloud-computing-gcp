@@ -1,0 +1,24 @@
+# Use a slim Python 3.6.6 base image built on Debian Stretch. Smaller images lead to faster deployments.
+FROM python:3.6.6-slim-stretch
+
+# Copy the requirements file into the image.
+COPY requirements.txt .
+
+# Install Python dependencies defined in requirements.txt. Upgrading ensures latest compatible versions.
+RUN pip3 install --upgrade -r requirements.txt
+
+# Copy the application code into the image.  
+COPY api api
+COPY model model
+
+# Expose port 5000 for the Flask application. 
+EXPOSE 5000
+
+# Define the entry point for the container. This command starts the Flask application when the container is run.
+ENTRYPOINT [ "python3.6", "/api/flask_json_api.py" ]
+
+
+# The following lines are comments from the original file and describe building and running the image locally.  These are not part of the Dockerfile itself.
+# scp -P 4444 -r C:\Users\soyperales\OneDrive\ModelDeployment\src carlos@localhost:/home/carlos  (Copies files to a remote server)
+# sudo docker build -t model -f Dockerfile_model .       (Builds the Docker image)
+# sudo docker run -p 5000:5000 model                  (Runs the Docker container)

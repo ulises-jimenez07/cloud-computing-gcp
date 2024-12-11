@@ -1,0 +1,25 @@
+version: '3'  # Specifies the Docker Compose file version. Version 3 is commonly used and supports features like multi-stage builds.
+
+services: # Defines the services that make up your application.
+  canary: # The "canary" service, likely used for health checks or testing deployments before full rollout.
+    build: # Configuration for building the canary service's Docker image.
+      context: .  # The build context is the current directory (where the Dockerfile is located).
+      dockerfile: Dockerfile_canary # The Dockerfile used to build the canary image.
+    ports: # Maps ports between the container and the host machine.
+     - "5001:5001" # Maps port 5001 on the host to port 5001 in the container.
+
+  model:  # The "model" service, likely containing the core application logic or a machine learning model.
+    build: # Configuration for building the model service's image.
+      context: . # The build context is the current directory.
+      dockerfile: Dockerfile_model # The Dockerfile used to build the model image.
+    ports:  # Port mapping for the model service.
+     - "5000:5000" # Maps port 5000 on the host to port 5000 in the container.
+
+  elector: # The "elector" service, potentially responsible for leader election in a distributed setup.
+    build:  # Build configuration for the elector service.
+      context: . # The build context is the current directory.
+      dockerfile: Dockerfile_elector # The Dockerfile used to build the elector image.
+    ports: # Port mapping for the elector service.
+     - "5002:5002" # Maps port 5002 on the host to port 5002 in the container.
+
+# sudo docker-compose up # Command to start the services defined in the Docker Compose file.  The 'sudo' indicates it needs root privileges.

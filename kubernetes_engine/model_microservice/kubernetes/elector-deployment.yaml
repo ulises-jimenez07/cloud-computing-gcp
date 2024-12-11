@@ -1,0 +1,19 @@
+apiVersion: apps/v1 # Specifies the API version for this resource (Deployment)
+kind: Deployment # Defines the resource type as a Deployment
+metadata: # Metadata about the Deployment
+  name: elector # Name of the Deployment. Must be unique within the namespace.
+spec: # Specification of the Deployment
+  selector: # Label selector used to match pods to this Deployment
+    matchLabels: # Labels that must match labels on pods
+      run: elector # Pods with the label "run: elector" will be managed by this Deployment
+  replicas: 2 # Number of desired pods. Deployment will maintain this number.
+  template: # Template for creating pods
+    metadata: # Metadata for the pods
+      labels: # Labels applied to the pods
+        run: elector # Label used for matching with the selector
+    spec: # Pod specification
+      containers: # List of containers in the pod
+      - name: elector # Name of the container
+        image: example/elector # Docker image to run
+        ports: # Ports exposed by the container
+        - containerPort: 5002 # Port exposed within the container

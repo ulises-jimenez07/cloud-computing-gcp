@@ -1,0 +1,15 @@
+apiVersion: v1 # Kubernetes API version
+kind: Service # Defines a Kubernetes Service object
+metadata: # Metadata section for the service
+  name: elector # Name of the service, must be unique within the namespace
+  labels: # Labels for the service, used for selection and organization
+    run: elector # Label "run: elector" is used to match this service with its pods
+spec: # Specification of the service
+  type: NodePort # Exposes the service on each node's IP at a static port (NodePort).
+  ports: # List of ports exposed by the service
+  - name: http # Name of the port (for clarity)
+    port: 5002 # Port number exposed by the service to external traffic
+    targetPort: 5002 # Port number to which the service proxies traffic within the pods
+    protocol: TCP # Protocol used for this port (TCP)
+  selector: # Used to select pods that this service should route traffic to
+    run: elector # This label selector matches pods with the label "run: elector"

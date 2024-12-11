@@ -1,0 +1,19 @@
+# Use a slim Python 3.6.6 base image based on Debian Stretch. This minimizes image size.
+FROM python:3.6.6-slim-stretch
+
+# Copy the requirements file to the image.
+COPY requirements.txt .
+
+# Install Python dependencies listed in requirements.txt.  The --upgrade flag ensures that the latest versions are installed.
+RUN pip install --upgrade -r requirements.txt
+
+# Copy the application code directory (api) to the image.
+COPY api api
+
+# Define the entrypoint for the container. This command will be executed when the container starts.
+# It runs the flask_canary.py script using Python 3.6.
+ENTRYPOINT [ "python3.6", "/api/flask_canary.py" ]
+
+# Comments demonstrating build and run commands (these are not executed within the Dockerfile).
+# sudo docker build --no-cache -t canary -f Dockerfile_canary .  # Builds the image with the tag 'canary' and no caching.
+# sudo docker run -p 5001:5001 canary # Runs the container, mapping port 5001 on the host to port 5001 in the container.
