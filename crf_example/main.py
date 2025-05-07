@@ -1,29 +1,17 @@
 import json
 import os
-
-from google.cloud import bigquery
+import base64
+import functions_framework
 from google.cloud import storage
-from google.cloud import vision
-
-from firebase_admin import db, initialize_app
-from firebase_functions import https_fn
-import flask
-from flask import request
-from google.cloud import firestore
 
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part
 
-PROJECT_ID = os.getenv("GCP_PROJECT_ID")
-REGION = os.getenv("GCP_REGION")
-MODEL_NAME = "gemini-1.5-flash-001"
+PROJECT_ID = "project-id"
+REGION = "us-central1"
+MODEL_NAME = "gemini-2.0-flash-001"
 
 vertexai.init(project=PROJECT_ID, location=REGION)
-
-# Firestore App
-initialize_app()
-app = flask.Flask(__name__)
-db = firestore.Client(project=PROJECT_ID, database="testinter")
 
 
 def get_prompt_for_summary() -> str:
@@ -32,11 +20,6 @@ def get_prompt_for_summary() -> str:
         Please summarize the given document.
     """
     return prompt
-
-
-def insert_document_firestore(file_name: str, summary: str):
-    data = {"name": file_name.split("/")[-1], "summary": summary}
-    db.collection("files").document(file_name.split("/")[-1]).set(data)
 
 
 def get_summary(src_bucket: str, file_name: str) -> str:
@@ -55,13 +38,16 @@ def get_summary(src_bucket: str, file_name: str) -> str:
     return response.text
 
 
-def on_document_added(event, context):
+@functions_framework.cloud_event
+def on_document_added(cloud_event):
     """Triggered from a message on a Cloud Pub/Sub topic.
     Args:
-        event: event payload
-        context: metadata for the event.
+        cloud_event: event payload
     """
-    pubsub_message = json.loads(base64.b64decode(event["data"]).decode("utf-8"))
+
+    pubsub_message = json.loads(
+        base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
+    )
 
     if pubsub_message["contentType"] != "application/pdf":
         raise ValueError("Only PDF files are supported, aborting")
@@ -72,5 +58,3 @@ def on_document_added(event, context):
 
     summary = get_summary(src_bucket, src_fname)
     print("Summary:", summary)
-
-    insert_document_firestore(src_fname, summary)
