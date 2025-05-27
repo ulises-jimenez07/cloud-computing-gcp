@@ -1,0 +1,21 @@
+id,name,category,price,quantity,date
+1001,Laptop XPS 15,Electronics;Computers,1299.99,5,2023-01-15
+1002,Wireless Headphones,Electronics;Audio,149.99,20,2023-01-16
+1003,Smart Watch,Electronics;Wearables,249.99,15,2023-01-17
+1004,Coffee Maker,Home;Kitchen,89.99,10,2023-01-18
+1005,Yoga Mat,Sports;Fitness,29.99,30,2023-01-19
+1006,Protein Powder,Health;Nutrition,39.99,25,2023-01-20
+1007,Desk Chair,Home;Office,199.99,8,2023-01-21
+1008,LED Monitor,Electronics;Computers,249.99,12,2023-01-22
+1009,Bluetooth Speaker,Electronics;Audio,79.99,18,2023-01-23
+1010,Running Shoes,Sports;Footwear,119.99,15,2023-01-24
+1011,Blender,Home;Kitchen,69.99,10,2023-01-25
+1012,Smartphone,Electronics;Mobile,899.99,7,2023-01-26
+1013,Tablet,Electronics;Mobile,499.99,9,2023-01-27
+1014,External Hard Drive,Electronics;Storage,129.99,20,2023-01-28
+1015,Wireless Mouse,Electronics;Computers,49.99,25,2023-01-29
+1016,Keyboard,Electronics;Computers,89.99,15,2023-01-30
+1017,Dumbbells Set,Sports;Fitness,149.99,8,2023-01-31
+1018,Air Purifier,Home;Appliances,199.99,6,2023-02-01
+1019,Water Bottle,Sports;Accessories,19.99,40,2023-02-02
+1020,Backpack,Fashion;Accessories,59.99,20,2023-02-03

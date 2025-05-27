@@ -1,0 +1,21 @@
+id,name,age,department,salary,hire_date
+1,John Smith,35,Engineering,95000,2018-03-15
+2,Mary Johnson,42,Marketing,85000,2015-07-22
+3,James Brown,28,Engineering,78000,2020-01-10
+4,Patricia Davis,31,Finance,92000,2019-05-08
+5,Robert Wilson,45,HR,75000,2014-11-30
+6,Linda Moore,38,Marketing,88000,2017-09-14
+7,Michael Taylor,29,Engineering,82000,2019-08-20
+8,Elizabeth Anderson,33,Finance,90000,2018-04-05
+9,William Thomas,41,HR,72000,2015-10-12
+10,Jennifer Jackson,27,Engineering,76000,2021-02-18
+11,David White,36,Marketing,84000,2017-06-25
+12,Susan Harris,44,Finance,96000,2016-03-07
+13,Richard Martin,30,Engineering,80000,2019-11-15
+14,Jessica Thompson,39,HR,73000,2016-08-22
+15,Charles Garcia,32,Marketing,86000,2018-07-11
+16,Sarah Martinez,37,Finance,94000,2017-01-30
+17,Joseph Robinson,26,Engineering,75000,2021-05-04
+18,Nancy Clark,43,HR,78000,2015-12-09
+19,Thomas Rodriguez,34,Marketing,87000,2018-10-17
+20,Margaret Lewis,40,Finance,98000,2016-05-23

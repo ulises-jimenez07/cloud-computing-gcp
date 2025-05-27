@@ -1,0 +1,22 @@
+Google Cloud Dataproc is a fast, easy-to-use, fully-managed cloud service for running Apache Spark and Apache Hadoop clusters in a simpler, more cost-efficient way.
+Dataproc automation helps you create clusters quickly, manage them easily, and save money by turning clusters off when you don't need them.
+With less time and money spent on administration, you can focus on your jobs and your data.
+
+Dataproc integrates with other Google Cloud services, giving you a powerful and complete platform for data processing, analytics, and machine learning.
+You can use Dataproc to run Apache Spark jobs, Apache Hadoop MapReduce jobs, Apache Hive queries, Apache Pig scripts, and more.
+
+Dataproc clusters are configured with Apache Spark and Apache Hadoop by default.
+You can also add optional components like Jupyter, Zeppelin, Presto, and more.
+This flexibility allows you to customize your cluster to meet your specific needs.
+
+Big data processing has never been easier with Google Cloud Dataproc.
+Create clusters in seconds, not minutes or hours.
+Scale clusters up or down as needed, even while jobs are running.
+Pay only for what you use with per-second billing.
+
+Dataproc is a powerful tool for data engineers, data scientists, and analysts.
+It provides a familiar environment for those already using Spark and Hadoop.
+At the same time, it eliminates the complexity of managing clusters and infrastructure.
+
+With Dataproc, you can focus on your data and your insights, not on managing infrastructure.
+That's the power of Google Cloud Dataproc.

@@ -1,0 +1,112 @@
+{
+  "type": "record",
+  "name": "User",
+  "namespace": "com.example",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string",
+      "doc": "Unique identifier for the user"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "doc": "Full name of the user"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "doc": "Email address of the user"
+    },
+    {
+      "name": "age",
+      "type": "int",
+      "doc": "Age of the user in years"
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "default": true,
+      "doc": "Whether the user account is active"
+    },
+    {
+      "name": "created_at",
+      "type": "long",
+      "doc": "Timestamp when the user was created (Unix timestamp in milliseconds)"
+    },
+    {
+      "name": "address",
+      "type": {
+        "type": "record",
+        "name": "Address",
+        "fields": [
+          {
+            "name": "street",
+            "type": "string"
+          },
+          {
+            "name": "city",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": "string"
+          },
+          {
+            "name": "zip",
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "type": "string"
+          }
+        ]
+      },
+      "doc": "User's address information"
+    },
+    {
+      "name": "phone_numbers",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "PhoneNumber",
+          "fields": [
+            {
+              "name": "type",
+              "type": {
+                "type": "enum",
+                "name": "PhoneType",
+                "symbols": ["HOME", "WORK", "MOBILE"]
+              }
+            },
+            {
+              "name": "number",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "default": [],
+      "doc": "List of user's phone numbers"
+    },
+    {
+      "name": "preferences",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "default": {},
+      "doc": "User preferences as key-value pairs"
+    },
+    {
+      "name": "tags",
+      "type": {
+        "type": "array",
+        "items": "string"
+      },
+      "default": [],
+      "doc": "Tags associated with the user"
+    }
+  ]
+}
