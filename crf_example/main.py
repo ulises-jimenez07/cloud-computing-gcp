@@ -7,7 +7,7 @@ from google.cloud import storage
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part
 
-PROJECT_ID = "project-id"
+PROJECT_ID = "cc-up-2025-q4-ulises"
 REGION = "us-central1"
 MODEL_NAME = "gemini-2.0-flash-001"
 

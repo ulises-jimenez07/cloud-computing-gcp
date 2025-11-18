@@ -61,4 +61,3 @@ Ordered chunks for user123:
 chunk_0_data_for_user123chunk_1_data_for_user123...
 ```
 
-That's it! Now you've got a working Pub/Sub streaming pipeline.
