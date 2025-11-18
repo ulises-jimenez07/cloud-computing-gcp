@@ -1,6 +1,0 @@
-google-cloud-pubsub==2.18.0
-avro-python3==1.10.2
-protobuf==4.23.4
-python-dotenv==1.0.0
-colorama==0.4.6
-tqdm==4.66.1

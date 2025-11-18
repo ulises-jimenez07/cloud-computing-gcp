@@ -6,30 +6,32 @@ Repository for examples for interproteccion engagement
 To trigger the analysis of files, once the file has been uploaded to a bucket the following APIs need to be enabled.
 
 1. Pub/Sub
-2. Cloud Functions
+2. Cloud Run Functions (2nd gen)
 3. Cloud Storage
 4. Vertex AI
-5. Firestore
-6. Firebase
 
 ### Create the required resources
 
-1. Create Firestore database [link](https://cloud.google.com/firestore/docs/create-database-server-client-library#create_a_in_native_mode_database)
-2. Create Pub Sub topic
+1. Create Pub Sub topic
    ```bash
     TOPIC_NAME="documents" 
     gcloud pubsub topics create $TOPIC_NAME    
    ```
-3. Add notifications to the bucket created in step 2.
+2. Add notifications to the bucket
    ```bash
     BUCKET_NAME="bucket-up-app"
 
-    gcloud storage buckets notifications create gs://$BUCKET_NAME --topic=$TOPIC_NAME    
+    gcloud storage buckets notifications create gs://$BUCKET_NAME --topic=$TOPIC_NAME
    ```
-4. Create Cloud function with [code](CF_upload_file/) and follow the next steps.
-   - Select Trigger type as Pub/Sub
-        ![trigger](images/cf_trigger_selection.png)
-   - Increase the Mememory
-        ![memory](images/cf_memory_increase.png)
-   - Python code
-        ![memory](images/cf_python_code.png)
+3. Deploy Cloud Run Function (2nd gen) with [code](CF_upload_file/)
+   ```bash
+   gcloud functions deploy process-document \
+     --gen2 \
+     --runtime=python311 \
+     --region=us-central1 \
+     --source=CF_upload_file \
+     --entry-point=process_pubsub_message \
+     --trigger-topic=$TOPIC_NAME \
+     --memory=512MB \
+     --timeout=540s
+   ```
