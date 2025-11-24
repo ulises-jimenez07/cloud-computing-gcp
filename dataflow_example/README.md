@@ -1,84 +1,60 @@
-# Google Cloud Dataflow Example
+# Simple Dataflow Pipeline Demo
 
-This folder contains a complete example of using Google Cloud Dataflow for data processing pipelines. Dataflow is a fully managed service for executing [Apache Beam](https://beam.apache.org/) pipelines within the Google Cloud Platform ecosystem.
+A simplified example showing how to run a data processing pipeline using Apache Beam. This pipeline reads a text file, counts the words, and saves the results.
 
-## What is Dataflow?
+## What it does
 
-Google Cloud Dataflow is a serverless, fast, and cost-effective service for data processing pipelines. It offers:
+- **Input**: Reads text from `data/sample_text.txt`
+- **Process**: Splits text into words and counts them
+- **Output**: Writes the word counts to `output.txt`
 
-- **Unified Stream and Batch Processing**: Process data of any size, whether bounded (batch) or unbounded (streaming)
-- **Serverless and Fully Managed**: No infrastructure to manage, with autoscaling and dynamic work rebalancing
-- **Real-time Insights**: Process data as it arrives for real-time analytics and ML
-- **Cost Efficiency**: Pay only for resources used during pipeline execution
+## Quick Setup
 
-## Examples in this Repository
-
-This repository includes:
-
-1. **Word Count Pipeline** (`wordcount_pipeline.py`): A classic example that counts word occurrences in text files
-2. **Streaming Pipeline** (`streaming_pipeline.py`): Demonstrates processing data from Pub/Sub in real-time
-3. **Data Transformation** (`transform_pipeline.py`): Shows how to transform data with various Beam transforms
-
-## Prerequisites
-
-- Google Cloud Platform account with Dataflow API enabled
-- Python 3.7+
-- Google Cloud SDK installed and configured
-
-## Setup Instructions
-
-1. Create a virtual environment and install dependencies:
+1. **Install dependencies**
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
+   pip install apache-beam[gcp]
    ```
 
-2. Set up your GCP environment variables:
+2. **GCP Authentication (Optional for local run)**
+   If you plan to run on Google Cloud Dataflow:
    ```bash
-   export PROJECT_ID="your-gcp-project-id"
-   export BUCKET_NAME="your-gcp-bucket-name"
+   gcloud auth application-default login
    ```
 
-3. Run a sample pipeline:
-   ```bash
-   python wordcount_pipeline.py \
-     --project=$PROJECT_ID \
-     --region=us-central1 \
-     --runner=DataflowRunner \
-     --temp_location=gs://$BUCKET_NAME/temp/ \
-     --input=gs://$BUCKET_NAME/data/input.txt \
-     --output=gs://$BUCKET_NAME/data/output
-   ```
+## Running the Demo
 
-## Pipeline Descriptions
+**Run locally:**
+```bash
+python simple_pipeline.py
+```
 
-### Word Count Pipeline
+**Run on Dataflow (Cloud):**
+```bash
+python simple_pipeline.py \
+  --runner=DataflowRunner \
+  --project=[YOUR_PROJECT_ID] \
+  --region=[YOUR_REGION] \
+  --temp_location=gs://[YOUR_BUCKET]/temp \
+  --output=gs://[YOUR_BUCKET]/output
+```
 
-The word count pipeline demonstrates the basic concepts of Beam pipelines:
-- Reading data from files
-- Applying transformations (splitting text into words)
-- Aggregating results (counting occurrences)
-- Writing results to output files
+## What to expect
 
-### Streaming Pipeline
+After running locally, you will see a new file named `output.txt-00000-of-00001` containing the word counts:
 
-The streaming pipeline shows how to:
-- Read from a Pub/Sub subscription
-- Process data in real-time
-- Apply windowing to group data
-- Output results to BigQuery
+```
+google: 3
+cloud: 3
+dataflow: 5
+is: 1
+...
+```
 
-### Data Transformation Pipeline
+## Cleanup
 
-This example demonstrates more advanced transformations:
-- Filtering data
-- Mapping and FlatMapping
-- Combining and grouping data
-- Using custom ParDo functions
+If you ran the pipeline on Dataflow, remember to delete the output and temp files from your GCS bucket to avoid storage charges:
 
-## Additional Resources
-
-- [Apache Beam Programming Guide](https://beam.apache.org/documentation/programming-guide/)
-- [Google Cloud Dataflow Documentation](https://cloud.google.com/dataflow/docs)
-- [Dataflow Templates](https://cloud.google.com/dataflow/docs/guides/templates/provided-templates)
+```bash
+gsutil rm -r gs://[YOUR_BUCKET]/output
+gsutil rm -r gs://[YOUR_BUCKET]/temp
+```
