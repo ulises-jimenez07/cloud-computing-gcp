@@ -1,3 +1,5 @@
+# This script simulates users streaming audio data to Cloud Pub/Sub by generating random chunks and publishing them.
+
 import time
 import json
 import random
@@ -6,18 +8,10 @@ from google.cloud import pubsub_v1
 
 
 class PubSubPublisher:
-    """
-    A module for publishing messages to a Google Cloud Pub/Sub topic.
-    """
+    """Publishes messages to a Google Cloud Pub/Sub topic."""
 
     def __init__(self, project_id: str, topic_id: str):
-        """
-        Initializes the PubSubPublisher.
-
-        Args:
-            project_id: The ID of your Google Cloud project.
-            topic_id: The ID of the Pub/Sub topic.
-        """
+        """Initializes the publisher with project and topic IDs."""
         self.project_id = project_id
         self.topic_id = topic_id
         self.publisher = pubsub_v1.PublisherClient()
@@ -25,13 +19,7 @@ class PubSubPublisher:
         self.order_counters = {}
 
     def publish_audio_chunk(self, user_id: str, chunk_data: str) -> None:
-        """
-        Publishes an audio chunk to Pub/Sub.
-
-        Args:
-            user_id: The ID of the user.
-            chunk_data: The audio chunk data (e.g., base64 encoded).
-        """
+        """Publishes a single audio chunk for a specific user."""
         if user_id not in self.order_counters:
             self.order_counters[user_id] = 0
         order_number = self.order_counters[user_id]
@@ -48,12 +36,7 @@ class PubSubPublisher:
         print(f"Published message ID: {future.result()}")
 
     def publish_end_of_stream(self, user_id: str) -> None:
-        """
-        Publishes an end-of-stream message to Pub/Sub.
-
-        Args:
-            user_id: The ID of the user.
-        """
+        """Publishes an end-of-stream message to signal completion."""
         message = {
             "userId": user_id,
             "type": "endOfStream",
@@ -65,14 +48,7 @@ class PubSubPublisher:
     def simulate_audio_stream(
         self, user_id: str, audio_chunks: list[str], delay: float = 0.5
     ) -> None:
-        """
-        Simulates sending audio chunks and an end-of-stream message.
-
-        Args:
-            user_id: The ID of the user.
-            audio_chunks: A list of audio chunk data.
-            delay: The delay in seconds between chunks.
-        """
+        """Simulates sending a sequence of audio chunks followed by an end-of-stream message."""
         print(f"Simulating audio stream for user: {user_id}")
         for chunk in audio_chunks:
             self.publish_audio_chunk(user_id, chunk)
@@ -84,7 +60,9 @@ class PubSubPublisher:
 
 
 if __name__ == "__main__":
-    project_id = "[PROJECT_ID]"
+    project_id = os.getenv("PROJECT_ID")
+    if not project_id:
+        raise ValueError("PROJECT_ID environment variable is not set")
     topic_id = "audio-stream-topic"
 
     users = ["user123", "user456", "user789", "user101"]

@@ -19,16 +19,36 @@ A simple demo showing how to stream audio chunks through Google Cloud Pub/Sub. T
    gcloud auth application-default login
    ```
 
-3. **Create the Pub/Sub infrastructure**
-
-   Edit [pub_sub_commands.sh](pub_sub_commands.sh) and replace `project-id` with your actual GCP project ID, then run:
+3. **Get your Project ID**
    ```bash
-   bash pub_sub_commands.sh
+   export PROJECT_ID=$(gcloud config get-value project)
    ```
 
-4. **Update the scripts**
+4. **Create the Pub/Sub infrastructure**
 
-   In both Python files, replace `[PROJECT_ID]` with your actual project ID.
+   Run the following commands to set up your topics and subscriptions:
+
+   Create the topic:
+   ```bash
+   gcloud pubsub topics create audio-stream-topic --project=$PROJECT_ID
+   ```
+
+   Create the subscription:
+   ```bash
+   gcloud pubsub subscriptions create audio-stream-subscription \
+       --topic=audio-stream-topic \
+       --project=$PROJECT_ID
+   ```
+
+   Verify resources:
+   ```bash
+   gcloud pubsub topics list --project=$PROJECT_ID
+   gcloud pubsub subscriptions list --project=$PROJECT_ID
+   ```
+
+5. **Update the scripts**
+
+   The scripts are configured to use the `PROJECT_ID` environment variable you exported in Step 3. No manual file editing is required.
 
 ## Running the Demo
 
@@ -59,5 +79,17 @@ Saved chunk for user123 with order 0
 End of stream detected for user: user123
 Ordered chunks for user123:
 chunk_0_data_for_user123chunk_1_data_for_user123...
+```
+
+## Cleanup
+
+To avoid incurring charges, delete the resources when you're done:
+
+```bash
+# Delete the subscription
+gcloud pubsub subscriptions delete audio-stream-subscription --project=$PROJECT_ID
+
+# Delete the topic
+gcloud pubsub topics delete audio-stream-topic --project=$PROJECT_ID
 ```
 

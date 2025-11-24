@@ -1,3 +1,5 @@
+# This script listens for audio chunks from Pub/Sub, reassembles them in order, and prints the complete stream for each user.
+
 import json
 import time
 import os
@@ -6,18 +8,12 @@ from google.cloud import pubsub_v1
 
 
 class PubSubSubscriber:
-    """
-    A module for subscribing to a Google Cloud Pub/Sub topic and processing messages.
-    """
+    """Subscribes to a Pub/Sub topic and processes incoming audio messages."""
 
-    def __init__(self, project_id: str, subscription_id: str, temp_dir: str = "temp_audio_chunks"):
-        """
-        Initializes the PubSubSubscriber.
-
-        Args:
-            project_id: The ID of your Google Cloud project.
-            subscription_id: The ID of the Pub/Sub subscription.
-        """
+    def __init__(
+        self, project_id: str, subscription_id: str, temp_dir: str = "temp_audio_chunks"
+    ):
+        """Initializes the subscriber and creates a temporary directory for chunks."""
         self.project_id = project_id
         self.subscription_id = subscription_id
         self.subscriber = pubsub_v1.SubscriberClient()
@@ -30,12 +26,7 @@ class PubSubSubscriber:
         self.user_buffers = {}
 
     def callback(self, message: pubsub_v1.subscriber.message.Message) -> None:
-        """
-        Callback function for receiving and processing messages.
-
-        Args:
-            message: The received Pub/Sub message.
-        """
+        """Handles incoming Pub/Sub messages, saving chunks or processing end-of-stream events."""
         try:
             data = json.loads(message.data.decode("utf-8"))
             user_id = data.get("userId")
@@ -67,7 +58,7 @@ class PubSubSubscriber:
             message.nack()
 
     def process_user_chunks(self, user_id: str):
-        """Processes and prints the chunks for a given user in order."""
+        """Reads saved chunks for a user in order, prints the full stream, and cleans up."""
         chunks = []
         index = 0
         while True:
@@ -84,12 +75,7 @@ class PubSubSubscriber:
         print("".join(chunks))
 
     def start_listening(self, timeout: int = 10) -> None:
-        """
-        Starts listening for messages on the subscription.
-
-        Args:
-            timeout: The time in seconds to keep the subscriber alive.
-        """
+        """Starts the subscriber loop and listens for messages for a specified duration."""
         self.streaming_pull_future = self.subscriber.subscribe(
             self.subscription_path, callback=self.callback
         )
@@ -106,9 +92,7 @@ class PubSubSubscriber:
             print("Subscriber stopped.")
 
     def stop_listening(self, reason: str = None) -> None:
-        """
-        Stops the subscriber and cancels the streaming pull future.
-        """
+        """Stops the subscriber and cancels any active pull requests."""
         if self.streaming_pull_future:
             self.streaming_pull_future.cancel()
             try:
@@ -118,10 +102,13 @@ class PubSubSubscriber:
                     print(f"{reason}: {e}")
                 else:
                     print(f"Error during shutdown: {e}")
-        time.sleep(1) 
+        time.sleep(1)
+
 
 if __name__ == "__main__":
-    project_id = "[PROJECT_ID]" 
+    project_id = os.getenv("PROJECT_ID")
+    if not project_id:
+        raise ValueError("PROJECT_ID environment variable is not set")
     subscription_id = "audio-stream-subscription"  # Replace with your subscription ID
 
     subscriber = PubSubSubscriber(project_id, subscription_id)
