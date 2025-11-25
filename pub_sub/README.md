@@ -2,6 +2,14 @@
 
 A simple demo showing how to stream audio chunks through Google Cloud Pub/Sub. Think of it as simulating multiple users sending voice recordings that get processed in real-time.
 
+## Why Pub/Sub?
+
+In real applications, you often have multiple services that need to talk to each other without being tightly coupled. Imagine a voice messaging app where users are constantly uploading audio. You don't want your upload service waiting around for the transcription service to finish processing before accepting the next upload.
+
+Pub/Sub solves this by acting as a message broker. Publishers send data without knowing who's listening, and subscribers process messages at their own pace. If your transcription service crashes, messages wait in the queue instead of being lost. Need to scale up during peak hours? Add more subscribers. Want to add a new feature like sentiment analysis? Just add another subscriber to the same topic.
+
+This demo simulates that pattern with streaming audio chunks, showing how multiple producers can send data that gets reliably delivered and processed by consumers, even when things arrive out of order or at different rates.
+
 ## What it does
 
 - **Streamer** ([audio_streamer.py](audio_streamer.py)) - Simulates 4 users sending audio chunks with random delays (like they're speaking)
