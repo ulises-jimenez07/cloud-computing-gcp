@@ -9,6 +9,26 @@ This guide demonstrates how to ingest US flight departure/arrival data into BigQ
 - **Years**: 2015 onwards (minimum 2015 required for the book exercises)
 - **Format**: CSV files partitioned by year and month (e.g., 201501.csv, 201502.csv)
 
+## Prerequisites
+
+### Get your Project ID
+```bash
+export PROJECT_ID=$(gcloud config get-value project)
+echo "Project ID: $PROJECT_ID"
+```
+
+### Create a Cloud Storage Bucket
+Create a globally unique bucket name and create the bucket:
+```bash
+export BUCKET_NAME="flights-data-${PROJECT_ID}"
+gsutil mb -p $PROJECT_ID gs://$BUCKET_NAME
+```
+
+Verify the bucket was created:
+```bash
+gsutil ls -p $PROJECT_ID
+```
+
 ## Step 1: Clone the Repository and Ingest Data
 
 ### Clone the source repository
@@ -25,7 +45,7 @@ cd data-science-on-gcp/02_ingest/
 This script copies all monthly CSV files for 2015 (Jan-Dec) plus January 2016 from the public bucket `gs://data-science-on-gcp/edition2/flights/raw` to your own bucket.
 
 ```bash
-./ingest_from_crsbucket.sh my-bucket-ulises-up2
+./ingest_from_crsbucket.sh $BUCKET_NAME
 ```
 
 **What this does:**
@@ -46,14 +66,14 @@ bq mk dsongcp
 ```bash
 bq load --autodetect --source_format=CSV \
    dsongcp.flights_auto \
-   gs://my-bucket-ulises-up2/flights/raw/201501.csv
+   gs://$BUCKET_NAME/flights/raw/201501.csv
 ```
 
 **Purpose:** Test that data loads correctly before loading all months.
 
 ### Load all months for 2015 with explicit schema
 ```bash
-./bqload.sh my-bucket-ulises-up 2015
+./bqload.sh $BUCKET_NAME 2015
 ```
 
 **What this does:**
