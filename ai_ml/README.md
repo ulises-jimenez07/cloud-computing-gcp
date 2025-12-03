@@ -186,11 +186,8 @@ gcloud config set project YOUR_PROJECT_ID
 
 #### Alternative: Create via gcloud CLI
 ```bash
-gcloud notebooks instances create ml-workbench-instance \
-  --location=us-central1-a \
-  --machine-type=n1-standard-4 \
-  --vm-image-project=deeplearning-platform-release \
-  --vm-image-family=common-cpu-notebooks
+gcloud notebooks workbench create ml-workbench-instance \
+  --location=us-central1-a 
 ```
 
 ---
